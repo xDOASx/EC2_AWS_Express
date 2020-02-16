@@ -34,7 +34,7 @@ app.get('/shit', (req, res) => {
                     var href = this.request.httpRequest.endpoint.href;
                     var bucketUrl = href + Bucket_Name + "/";
                     var songKey = i.Key;
-                    var songUrl = bucketUrl + encodeURIComponent(songKey);
+                    var songUrl = getSignedUrlPromise(bucketUrl + encodeURIComponent(songKey));
                     assign(library, val, songUrl);
                 }
             });
