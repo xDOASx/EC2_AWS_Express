@@ -13,11 +13,11 @@ app.use(bodyParser.json());
 
 var s3 = new AWS.S3({
     region: "us-east-1",
-    Bucket: "nesbit-music-app"
+    Bucket: Bucket_Name
 });
 
 let params = {
-    Bucket: "nesbit-music-app"
+    Bucket: Bucket_Name
 }
 
 var library = {};
