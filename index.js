@@ -24,15 +24,27 @@ app.get('/', (req, res) => {
 });
 
 app.get('/shit', (req, res) => {
+
+    library = [];
+
     s3.listObjectsV2(params, function(err,data) {
         if (err) {
             console.log(err);
         }
         else {
             data.Contents.forEach((i) => {
-                console.log(i);
-                res.send(i);
+                if (i.Size != 0) {
+                    var val = i.Key.split("/");
+                    // var artist = val[0];
+                    // var album = val[1];
+                    // var song = val[2];
+                    library.push(val)
+                }
+                // console.log(i);
+                // res.send(i);
             });
+            console.log(library);
+            res.send(library);
         }
     })
 });
