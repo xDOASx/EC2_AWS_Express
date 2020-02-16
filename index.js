@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const AWS = require('aws-sdk')
+const Bucket_Name = "nesbit-music-app"
 
 const app = express();
 const port = 3000;
@@ -30,7 +31,11 @@ app.get('/shit', (req, res) => {
             data.Contents.forEach((i) => {
                 if (i.Size != 0) {
                     var val = i.Key.split("/");
-                    assign(library, val, i.Key);
+                    var href = this.request.httpRequest.endpoint.href;
+                    var bucketUrl = href + Bucket_Name + "/";
+                    var songKey = i.Key;
+                    var songUrl = bucketUrl + encodeURIComponent(songKey);
+                    assign(library, val, songUrl);
                 }
             });
             res.send(library);
@@ -40,7 +45,7 @@ app.get('/shit', (req, res) => {
 
 function assign(obj, keyPath, value) {
     lastKeyIndex = keyPath.length-1;
-    for (var i = 0; i < lastKeyIndex; ++ i) {
+    for (var i = 0; i < lastKeyIndex; ++i) {
         key = keyPath[i];
         if (!(key in obj)){
         obj[key] = {}
