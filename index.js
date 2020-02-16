@@ -19,14 +19,9 @@ let params = {
     Bucket: "nesbit-music-app"
 }
 
-app.get('/', (req, res) => {
-    res.send('Bullshit, from express');
-});
+var library = {};
 
 app.get('/shit', (req, res) => {
-
-    library = [];
-
     s3.listObjectsV2(params, function(err,data) {
         if (err) {
             console.log(err);
@@ -35,19 +30,25 @@ app.get('/shit', (req, res) => {
             data.Contents.forEach((i) => {
                 if (i.Size != 0) {
                     var val = i.Key.split("/");
-                    // var artist = val[0];
-                    // var album = val[1];
-                    // var song = val[2];
-                    library.push(val)
+                    assign(library, val, i.Key);
                 }
-                // console.log(i);
-                // res.send(i);
             });
-            console.log(library);
             res.send(library);
         }
     })
 });
+
+function assign(obj, keyPath, value) {
+    lastKeyIndex = keyPath.length-1;
+    for (var i = 0; i < lastKeyIndex; ++ i) {
+        key = keyPath[i];
+        if (!(key in obj)){
+        obj[key] = {}
+        }
+        obj = obj[key];
+    }
+    obj[keyPath[lastKeyIndex]] = value;
+}
 
 
 app.listen(port, () => console.log(`Music app listening on port ${port}!`))
