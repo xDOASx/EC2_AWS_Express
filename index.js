@@ -42,11 +42,17 @@ app.get('/artists/for/genre', (req, res) => {
     res.send(artists);
 });
 
-app.get('albums/for/artist', (req, res) => {
+app.get('/albums/for/artist', (req, res) => {
     var artist = req.query.artist;
     var albums = scan(artist);
     res.send(albums);
 });
+
+app.get('/songs/for/album', (req, res) => {
+    var album = req.query.album;
+    var songs = scan(album);
+    res.send(songs);
+})
 
 function scan(scanKey) {
     var resultArray = []
