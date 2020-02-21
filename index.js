@@ -22,7 +22,7 @@ AWS.config.update({
     region: "us-east-1"
 });
 
-var dynamodb = new AWS.DynamoDB();
+var dynamodb = new AWS.DynamoDB.DocumentClient();
 
 let params = {
     Bucket: BUCKET_NAME
@@ -33,14 +33,14 @@ var library = {};
 
 app.get('/genres', (req,res) => {
     var params = {
-        TableName : TABLE_NAME,
+        TableName : "music",
         FilterExpression: "PK = :genres",
         ExpressionAttributeValues: {
             ":genres": "Genres"
         }
     };
 
-    dynamodb.batchGetItem(params, function(err, data) {
+    dynamodb.scan(params, function(err, data) {
         if(err) console.log(err, err.stack);
         else    console.log(data);
     });
