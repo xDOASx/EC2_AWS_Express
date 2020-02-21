@@ -4,6 +4,7 @@ const cors = require('cors');
 const AWS = require('aws-sdk')
 
 const BUCKET_NAME = "nesbit-music-app"
+const TABLE_NAME = "music"
 
 const app = express();
 const port = 3000;
@@ -17,11 +18,33 @@ var s3 = new AWS.S3({
     Bucket: BUCKET_NAME
 });
 
+AWS.config.update({
+    region: "us-east-1"
+});
+
+var dynamodb = new AWS.DynamoDB();
+
 let params = {
     Bucket: BUCKET_NAME
 }
 
 var library = {};
+
+
+app.get('/genres', (req,res) => {
+    var params = {
+        TableName : TABLE_NAME,
+        FilterExpression: "PK = :genres",
+        ExpressionAttributeValues: {
+            ":genres": "Genres"
+        }
+    };
+
+    dynamodb.batchGetItem(params, function(err, data) {
+        if(err) console.log(err, err.stack);
+        else    console.log(data);
+    });
+});
 
 app.get('/listEverything', (req, res) => {
     s3.listObjectsV2(params, function(err,data) {
