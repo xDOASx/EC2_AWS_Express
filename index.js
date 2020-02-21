@@ -32,6 +32,8 @@ var library = {};
 
 
 app.get('/genres', (req,res) => {
+    var genres = [];
+
     var params = {
         TableName : "music",
         FilterExpression: "PK = :genres",
@@ -42,7 +44,15 @@ app.get('/genres', (req,res) => {
 
     dynamodb.scan(params, function(err, data) {
         if(err) console.log(err, err.stack);
-        else    console.log(data);
+        else {
+            console.log(data);
+            data.Items.forEach((i) => {
+                console.log(i.SK);
+                genres.push(i.SK);
+            })
+            console.log(genres);
+            res.send(genres);
+        }
     });
 });
 
