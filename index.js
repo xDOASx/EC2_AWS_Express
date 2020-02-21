@@ -32,39 +32,30 @@ var library = {};
 
 
 app.get('/genres', (req,res) => {
-    var genres = [];
-
-    var params = {
-        TableName : "music",
-        FilterExpression: "PK = :genres",
-        ExpressionAttributeValues: {
-            ":genres": "Genres"
-        }
-    };
-
-    dynamodb.scan(params, function(err, data) {
-        if(err) console.log(err, err.stack);
-        else {
-            console.log(data);
-            data.Items.forEach((i) => {
-                console.log(i.SK);
-                genres.push(i.SK);
-            })
-            console.log(genres);
-            res.send(genres);
-        }
-    });
+    var genres = scan("Genres");
+    res.send(genres);
 });
 
 app.get('/artists/for/genre', (req, res) => {
     var genre = req.query.genre;
-    var artists = [];
+    var artists = scan(genre);
+    res.send(artists);
+});
+
+app.get('albums/for/artist', (req, res) => {
+    var artist = req.query.artist;
+    var albums = scan(artist);
+    res.send(albums);
+});
+
+function scan(scanKey) {
+    var resultArray = []
 
     var params = {
         TableName : "music",
-        FilterExpression: "PK = :genres",
+        FilterExpression: "PK = :scanValue",
         ExpressionAttributeValues: {
-            ":genres": genre
+            ":scanValue": scanKey
         }
     };
 
@@ -74,13 +65,14 @@ app.get('/artists/for/genre', (req, res) => {
             console.log(data);
             data.Items.forEach((i) => {
                 console.log(i.SK);
-                artists.push(i.SK);
+                resultArray.push(i.SK);
             })
-            console.log(artists);
-            res.send(artists);
+            console.log(resultArray);
         }
     })
-});
+
+    return resultArray;
+}
 
 app.get('/listEverything', (req, res) => {
     s3.listObjectsV2(params, function(err,data) {
