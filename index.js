@@ -56,6 +56,32 @@ app.get('/genres', (req,res) => {
     });
 });
 
+app.get('/artists/for/genre', (req, res) => {
+    var genre = req.query.genre;
+    var artists = [];
+
+    var params = {
+        TableName : "music",
+        FilterExpression: "PK = :genres",
+        ExpressionAttributeValues: {
+            ":genres": genre
+        }
+    };
+
+    dynamodb.scan(params, function(err, data) {
+        if(err) console.log(err, err.stack);
+        else {
+            console.log(data);
+            data.Items.forEach((i) => {
+                console.log(i.SK);
+                artists.push(i.SK);
+            })
+            console.log(artists);
+            res.send(artists);
+        }
+    })
+});
+
 app.get('/listEverything', (req, res) => {
     s3.listObjectsV2(params, function(err,data) {
         if (err) {
