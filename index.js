@@ -23,7 +23,7 @@ let params = {
 
 var library = {};
 
-app.get('/shit', (req, res) => {
+app.get('/listEverything', (req, res) => {
     s3.listObjectsV2(params, function(err,data) {
         if (err) {
             console.log(err);
