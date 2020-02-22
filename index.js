@@ -30,58 +30,64 @@ let params = {
 
 var library = {};
 
+app.post('/uploadNewSong', async (req, res) => {
+    console.log("Post Successful");
+    console.log(req.query);
+})
 
-app.get('/genres', (req,res) => {
+app.get('/genres', async (req,res) => {
     var genres = scan("Genres");
     res.send(genres);
 });
 
-app.get('/artists/for/genre', (req, res) => {
+app.get('/artists/for/genre', async (req, res) => {
     var genre = req.query.genre;
     var artists = query(genre);
     res.send(artists);
 });
 
-app.get('/albums/for/artist', (req, res) => {
+app.get('/albums/for/artist', async (req, res) => {
     var artist = req.query.artist;
     var albums = query(artist);
     res.send(albums);
 });
 
-app.get('/songs/for/album', (req, res) => {
+app.get('/songs/for/album', async (req, res) => {
     var album = req.query.album;
     var songs = query(album);
     res.send(songs);
 })
 
-app.get('/song', (req, res) => {
+app.get('/song', async (req, res) => {
     var song = req.query.song;
     var url = query(song);
     res.send(url);
 })
 
 function query(scanKey) {
-    var resultArray = [];
+    return new Promise( result => {
+        var resultArray = [];
 
-    var params = {
-        TableName: "music",
-        KeyConditionExpression: "PK = :scanValue",
-        ExpressionAttributeValues: { 
-            ":scanValue": scanKey
-        }
-    };
-  
-    dynamodb.query(params, function (err, data) {
-        if (err) console.log(err);
-        else{
-            data.Items.forEach((i) => {
-                resultArray.push(i.SK);
-            });
-        console.log("resultArray: ", resultArray);
-      } 
-    });
-
-    return resultArray;
+        var params = {
+            TableName: "music",
+            KeyConditionExpression: "PK = :scanValue",
+            ExpressionAttributeValues: { 
+                ":scanValue": scanKey
+            }
+        };
+      
+        dynamodb.query(params, function (err, data) {
+            if (err) console.log(err);
+            else{
+                data.Items.forEach((i) => {
+                    resultArray.push(i.SK);
+                });
+            console.log("resultArray: ", resultArray);
+          } 
+        });
+    
+        result(resultArray);
+    })
 }
 
 function scan(scanKey) {
