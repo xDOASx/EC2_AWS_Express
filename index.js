@@ -32,7 +32,7 @@ var library = {};
 
 app.post('/uploadNewSong', async (req, res) => {
     console.log("Post Successful");
-    console.log(req.query);
+    console.log(req.body);
 })
 
 app.get('/genres', async (req,res) => {
