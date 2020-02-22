@@ -32,10 +32,10 @@ var library = {};
 
 app.post('/uploadNewSong', async (req, res) => {
     console.log("Post Successful");
-    console.log(req.body.genre);
+    store(req.body);
 })
 
-app.get('/genres', async (req,res) => {
+app.get('/genres', (req,res) => {
     var genres = scan("Genres");
     res.send(genres);
 });
@@ -66,6 +66,64 @@ app.get('/song', async (req, res) => {
 
 function store(songInfo) {
 
+    var stupidFuckingStringGodDamnYouDynamoDB = "Genres";
+    var paramsForGenres = {
+        TableName: "music",
+        Item: {
+            "PK" : stupidFuckingStringGodDamnYouDynamoDB,
+            'SK' : songInfo.genre
+        }
+    };
+    var paramsForGenre = {
+        TableName: "music",
+        Item: {
+            'PK' : songInfo.genre,
+            'SK' : songInfo.artist
+        }
+    };
+    var paramsForArtist = {
+        TableName: "music",
+        Item: {
+            'PK' : songInfo.artist,
+            'SK' : songInfo.album
+        }
+    };
+    var paramsForAlbum = {
+        TableName: "music",
+        Item: {
+            'PK' : songInfo.album,
+            'SK' : songInfo.song
+        }
+    };
+
+    dynamodb.put(paramsForGenres, function(err, data) {
+        if (err) {
+            console.log("Error", err);
+        } else {
+            console.log("Success", data);
+        }
+    });
+    dynamodb.put(paramsForGenre, function(err, data) {
+        if (err) {
+            console.log("Error", err);
+        } else {
+            console.log("Success", data);
+        }
+    });
+    dynamodb.put(paramsForArtist, function(err, data) {
+        if (err) {
+            console.log("Error", err);
+        } else {
+            console.log("Success", data);
+        }
+    });
+    dynamodb.put(paramsForAlbum, function(err, data) {
+        if (err) {
+            console.log("Error", err);
+        } else {
+            console.log("Success", data);
+        }
+    });
 }
 
 function query(scanKey) {
