@@ -64,17 +64,19 @@ function query(scanKey) {
     var resultArray = [];
 
     var params = {
-      TableName: "music",
-      KeyConditionExpression: "PK = :scanValue",
-      ExpressionAttributeValues: { ":scanValue": scanKey}
+        TableName: "music",
+        KeyConditionExpression: "PK = :scanValue",
+        ExpressionAttributeValues: { 
+            ":scanValue": scanKey
+        }
     };
   
     dynamodb.query(params, function (err, data) {
-      if (err) console.log(err);
-      else{
-        data.Items.forEach((i) => {
-          resultArray.push(i.SK);
-        });
+        if (err) console.log(err);
+        else{
+            data.Items.forEach((i) => {
+                resultArray.push(i.SK);
+            });
         console.log("resultArray: ", resultArray);
       } 
     });
