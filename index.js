@@ -32,7 +32,7 @@ var library = {};
 
 app.post('/uploadNewSong', async (req, res) => {
     console.log("Post Successful");
-    console.log(req.body);
+    console.log(req.body.genre);
 })
 
 app.get('/genres', async (req,res) => {
@@ -42,27 +42,31 @@ app.get('/genres', async (req,res) => {
 
 app.get('/artists/for/genre', async (req, res) => {
     var genre = req.query.genre;
-    var artists = query(genre);
+    var artists = await query(genre);
     res.send(artists);
 });
 
 app.get('/albums/for/artist', async (req, res) => {
     var artist = req.query.artist;
-    var albums = query(artist);
+    var albums = await query(artist);
     res.send(albums);
 });
 
 app.get('/songs/for/album', async (req, res) => {
     var album = req.query.album;
-    var songs = query(album);
+    var songs = await query(album);
     res.send(songs);
 })
 
 app.get('/song', async (req, res) => {
     var song = req.query.song;
-    var url = query(song);
+    var url = await query(song);
     res.send(url);
 })
+
+function store(songInfo) {
+
+}
 
 function query(scanKey) {
     return new Promise( result => {
