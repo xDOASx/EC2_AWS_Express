@@ -35,8 +35,8 @@ app.post('/uploadNewSong', async (req, res) => {
     store(req.body);
 })
 
-app.get('/genres', (req,res) => {
-    var genres = scan("Genres");
+app.get('/genres', async (req,res) => {
+    var genres = await scan("Genres");
     res.send(genres);
 });
 
@@ -125,7 +125,7 @@ function store(songInfo) {
     });
 }
 
-function query(scanKey) {
+async function query(scanKey) {
     return new Promise( result => {
         var resultArray = [];
 
@@ -151,30 +151,32 @@ function query(scanKey) {
     })
 }
 
-function scan(scanKey) {
-    var resultArray = []
+async function scan(scanKey) {
+    return new Promise( result => {
+        var resultArray = []
 
-    var params = {
-        TableName : MUSIC_TABLE_NAME,
-        FilterExpression: "PK = :scanValue",
-        ExpressionAttributeValues: {
-            ":scanValue": scanKey
-        }
-    };
+        var params = {
+            TableName : MUSIC_TABLE_NAME,
+            FilterExpression: "PK = :scanValue",
+            ExpressionAttributeValues: {
+                ":scanValue": scanKey
+            }
+        };
 
-    dynamodb.scan(params, function(err, data) {
-        if(err) console.log(err, err.stack);
-        else {
-            console.log(data);
-            data.Items.forEach((i) => {
-                console.log(i.SK);
-                resultArray.push(i.SK);
-            })
-            console.log(resultArray);
-        }
-    })
+        dynamodb.scan(params, function(err, data) {
+            if(err) console.log(err, err.stack);
+            else {
+                console.log(data);
+                data.Items.forEach((i) => {
+                    console.log(i.SK);
+                    resultArray.push(i.SK);
+                })
+                console.log(resultArray);
+            }
+        })
 
-    return resultArray;
+        result(resultArray);
+    });
 }
 
 app.get('/listEverything', (req, res) => {
