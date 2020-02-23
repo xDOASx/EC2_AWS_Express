@@ -4,7 +4,7 @@ const cors = require('cors');
 const AWS = require('aws-sdk')
 
 const BUCKET_NAME = "nesbit-music-app"
-const TABLE_NAME = "music"
+const MUSIC_TABLE_NAME = "music"
 
 const app = express();
 const port = 3000;
@@ -66,30 +66,29 @@ app.get('/song', async (req, res) => {
 
 function store(songInfo) {
 
-    var stupidFuckingStringGodDamnYouDynamoDB = "Genres";
     var paramsForGenres = {
-        TableName: "music",
+        TableName: MUSIC_TABLE_NAME,
         Item: {
-            "PK" : stupidFuckingStringGodDamnYouDynamoDB,
+            "PK" : "Genres",
             'SK' : songInfo.genre
         }
     };
     var paramsForGenre = {
-        TableName: "music",
+        TableName: MUSIC_TABLE_NAME,
         Item: {
             'PK' : songInfo.genre,
             'SK' : songInfo.artist
         }
     };
     var paramsForArtist = {
-        TableName: "music",
+        TableName: MUSIC_TABLE_NAME,
         Item: {
             'PK' : songInfo.artist,
             'SK' : songInfo.album
         }
     };
     var paramsForAlbum = {
-        TableName: "music",
+        TableName: MUSIC_TABLE_NAME,
         Item: {
             'PK' : songInfo.album,
             'SK' : songInfo.song
@@ -131,7 +130,7 @@ function query(scanKey) {
         var resultArray = [];
 
         var params = {
-            TableName: "music",
+            TableName: MUSIC_TABLE_NAME,
             KeyConditionExpression: "PK = :scanValue",
             ExpressionAttributeValues: { 
                 ":scanValue": scanKey
@@ -156,7 +155,7 @@ function scan(scanKey) {
     var resultArray = []
 
     var params = {
-        TableName : "music",
+        TableName : MUSIC_TABLE_NAME,
         FilterExpression: "PK = :scanValue",
         ExpressionAttributeValues: {
             ":scanValue": scanKey
