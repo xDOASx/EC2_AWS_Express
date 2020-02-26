@@ -144,10 +144,10 @@ async function query(scanKey) {
                     resultArray.push(i.SK);
                 });
             console.log("resultArray: ", resultArray);
-          } 
+          }
+          
+          result(resultArray);
         });
-    
-        result(resultArray);
     })
 }
 
@@ -173,9 +173,8 @@ async function scan(scanKey) {
                 })
                 console.log(resultArray);
             }
+            result(resultArray);
         })
-
-        result(resultArray);
     });
 }
 
