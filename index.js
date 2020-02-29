@@ -33,7 +33,11 @@ var library = {};
 app.post('/uploadNewSong', async (req, res) => {
     console.log("Post Successful");
     store(req.body);
-})
+});
+
+app.post('/save-user', async (req, res) => {
+    console.log("Post Successful: " + req);
+});
 
 app.get('/genres', async (req,res) => {
     var genres = await scan("Genres");
