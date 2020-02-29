@@ -5,6 +5,7 @@ const AWS = require('aws-sdk')
 
 const BUCKET_NAME = "nesbit-music-app"
 const MUSIC_TABLE_NAME = "music"
+const USER_TABLE_NAME = "Users"
 
 const app = express();
 const port = 3000;
@@ -36,7 +37,10 @@ app.post('/uploadNewSong', async (req, res) => {
 });
 
 app.post('/save-user', async (req, res) => {
-    console.log("Post Successful: " + req);
+    var email = req.query.email;
+    var name = req.query.name;
+    var id = req.query.id;
+    saveUser(email, name, id);
 });
 
 app.get('/genres', async (req,res) => {
@@ -67,6 +71,28 @@ app.get('/song', async (req, res) => {
     var url = await query(song);
     res.send(url);
 })
+
+function saveUser(email, name, id) {
+    return new Promise((reolve, reject) => {
+        var params = {
+            TableName: USER_TABLE_NAME,
+            Item: {
+                "PK" : name,
+                "SK" : email,
+                "UID" : id
+            }
+        };
+
+        dynamodb.put(params, function(err, data) {
+            if (err) {
+                console.log(err);
+            }
+            else {
+                console.log(data);
+            }
+        })
+    });
+}
 
 function store(songInfo) {
 
