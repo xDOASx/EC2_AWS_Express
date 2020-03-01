@@ -45,6 +45,7 @@ app.post('/save-user', async (req, res) => {
         console.log(e);
         res.status(400).send('Database had a meltdown');
     });
+    console.log("User save successful");
     res.status(200).send('The dude abides');
 });
 
@@ -178,7 +179,7 @@ async function query(scanKey) {
                 data.Items.forEach((i) => {
                     resultArray.push(i.SK);
                 });
-            console.log("resultArray: ", resultArray);
+            // console.log("resultArray: ", resultArray);
           }
           
           result(resultArray);
@@ -206,7 +207,7 @@ async function scan(scanKey) {
                     console.log(i.SK);
                     resultArray.push(i.SK);
                 })
-                console.log(resultArray);
+                // console.log(resultArray);
             }
             result(resultArray);
         })
