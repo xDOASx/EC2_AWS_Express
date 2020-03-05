@@ -1,11 +1,12 @@
-const express = require('express')
+const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const AWS = require('aws-sdk')
+const AWS = require('aws-sdk');
+const serverless = require('serverless-http');
 
-const BUCKET_NAME = "nesbit-music-app"
-const MUSIC_TABLE_NAME = "music"
-const USER_TABLE_NAME = "Users"
+const BUCKET_NAME = "nesbit-music-app";
+const MUSIC_TABLE_NAME = "music";
+const USER_TABLE_NAME = "Users";
 
 const app = express();
 const port = 3000;
