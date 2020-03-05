@@ -36,18 +36,18 @@ app.post('/uploadNewSong', async (req, res) => {
     store(req.body);
 });
 
-app.post('/save-user', async (req, res) => {
-    var email = req.query.email;
-    var name = req.query.name;
-    var id = req.query.id;
-    saveUser(email, name, id)
-    .catch(e => {
-        console.log(e);
-        res.status(400).send('Database had a meltdown');
-    });
-    console.log("User save successful");
-    res.status(200).send('The dude abides');
-});
+// app.post('/save-user', async (req, res) => {
+//     var email = req.query.email;
+//     var name = req.query.name;
+//     var id = req.query.id;
+//     saveUser(email, name, id)
+//     .catch(e => {
+//         console.log(e);
+//         res.status(400).send('Database had a meltdown');
+//     });
+//     console.log("User save successful");
+//     res.status(200).send('The dude abides');
+// });
 
 app.get('/genres', async (req,res) => {
     var genres = await scan("Genres");
