@@ -15,6 +15,8 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
+module.exports.handler = serverless(app);
+
 var s3 = new AWS.S3({
     region: "us-east-1",
     Bucket: BUCKET_NAME
@@ -173,7 +175,7 @@ async function query(scanKey) {
                 ":scanValue": scanKey
             }
         };
-      
+
         dynamodb.query(params, function (err, data) {
             if (err) console.log(err);
             else{
@@ -181,9 +183,9 @@ async function query(scanKey) {
                     resultArray.push(i.SK);
                 });
             // console.log("resultArray: ", resultArray);
-          }
-          
-          result(resultArray);
+        }
+
+        result(resultArray);
         });
     })
 }
