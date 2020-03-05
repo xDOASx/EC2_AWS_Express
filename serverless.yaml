@@ -1,36 +1,15 @@
 # serverless.yaml    
 service: my-express-application
+
 provider:
   name: aws
   runtime: nodejs6.10
   stage: dev
   region: us-east-1
+
 functions:
   app:
     handler: index.handler
     events:
       - http: ANY/
       - http: 'ANY {proxy+}'
-# Your Serverless function definitions go here.
-
-# CloudFormation template syntax from here on.
-# resources:
-#   Resources:
-#     usersTable: 
-#       Type: AWS::DynamoDB::Table
-#       Properties:
-#         TableName: usersTable
-#         AttributeDefinitions:
-#           - AttributeName: PK
-#             AttributeType: S
-#           - AttributeName: SK
-#             AttributeType: S
-#         KeySchema:
-#           - AttributeName: PK
-#             KeyType: HASH
-#           -
-#           AttributeName: SK
-#             KeyType: RANGE
-#         ProvisionedThroughput:
-#           ReadCapacityUnits: 1
-#           WriteCapacityUnits: 1
