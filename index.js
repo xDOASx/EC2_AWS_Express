@@ -34,6 +34,10 @@ let params = {
 
 var library = {};
 
+app.get('/', function (req, res) {
+    res.send('Hello World!')
+})
+
 app.post('/uploadNewSong', async (req, res) => {
     console.log("Post Successful");
     store(req.body);
