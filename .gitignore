@@ -1,3 +1,4 @@
 # Env
 node_modules
 .vscode
+.serverless
