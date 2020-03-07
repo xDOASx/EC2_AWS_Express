@@ -2,7 +2,6 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const AWS = require('aws-sdk');
-const serverless = require('serverless-http');
 
 const BUCKET_NAME = "nesbit-music-app";
 const MUSIC_TABLE_NAME = "music";
@@ -14,8 +13,6 @@ app.use(cors());
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-
-module.exports.handler = serverless(app);
 
 var s3 = new AWS.S3({
     region: "us-east-1",
@@ -33,10 +30,6 @@ let params = {
 }
 
 var library = {};
-
-app.get('/', function (req, res) {
-    res.send('Hello World!')
-})
 
 app.post('/uploadNewSong', async (req, res) => {
     console.log("Post Successful");
@@ -85,27 +78,27 @@ app.get('/song', async (req, res) => {
     res.send(url);
 })
 
-function saveUser(email, name, id) {
-    return new Promise((reolve, reject) => {
-        var params = {
-            TableName: USER_TABLE_NAME,
-            Item: {
-                "PK" : name,
-                "SK" : email,
-                "UID" : id
-            }
-        };
+// function saveUser(email, name, id) {
+//     return new Promise((reolve, reject) => {
+//         var params = {
+//             TableName: USER_TABLE_NAME,
+//             Item: {
+//                 "PK" : name,
+//                 "SK" : email,
+//                 "UID" : id
+//             }
+//         };
 
-        dynamodb.put(params, function(err, data) {
-            if (err) {
-                console.log(err);
-            }
-            else {
-                console.log(data);
-            }
-        })
-    });
-}
+//         dynamodb.put(params, function(err, data) {
+//             if (err) {
+//                 console.log(err);
+//             }
+//             else {
+//                 console.log(data);
+//             }
+//         })
+//     });
+// }
 
 function store(songInfo) {
 
